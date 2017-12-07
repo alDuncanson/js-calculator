@@ -1,0 +1,143 @@
+!!! 5
+%html
+	%head
+		%title JS Calculator
+		%link(rel="stylesheet"
+			  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+			  crossorigin="anonymous")
+	%body
+		#calculator.container
+			#calc-screen.row.no-gutters
+			.buttons
+				.row
+					%span.col-sm-3.text-center 7
+					%span.col-sm-3.text-center 8
+					%span.col-sm-3.text-center 9
+					%span.op.col-sm-3.text-center +
+				.row
+					%span.col-sm-3.text-center 4
+					%span.col-sm-3.text-center 5
+					%span.col-sm-3.text-center 6
+					%span.op.col-sm-3.text-center -
+				.row
+					%span.col-sm-3.text-center 1
+					%span.col-sm-3.text-center 2
+					%span.col-sm-3.text-center 3
+					%span.op.col-sm-3.text-center *
+				.row
+					%span.col-sm-3.text-center C
+					%span.col-sm-3.text-center 0
+					%span.col-sm-3.text-center .
+					%span.op.col-sm-3.text-center /
+				.row
+					%span.eq.col-sm-12.text-center calculate
+:sass
+	body
+		background: darkseagreen
+		#calculator
+			font-size: 30px
+			color: white
+			margin-top: 50px
+			#calc-screen
+				background: dimgrey
+				height: 120px
+				text-align: center
+				font-size: 66px
+			.buttons
+				span
+					background: silver
+					padding: 40px 0px
+					display: table
+					transition: 0.25s ease-in-out
+					&:hover
+						background: #D3D3D3
+						cursor: pointer
+					&.eq
+						background: dimgrey
+						text-transform: uppercase
+						font-size: 30px
+						&:hover
+							background: grey
+					&.op
+						background: dimgrey
+						&:hover
+							background: grey
+:javascript
+	/*
+	 * Initialize keys and set a flag for decimals
+	 */
+	var keys = document.querySelectorAll('#calculator span');
+	var operators = ['+','-','*','/'];
+	var decimal = false;
+
+	/*
+	 * Loop through all the 'keys' (spans) that keys queried
+	 */
+	for (var i = 0; i < keys.length; i++) 
+	{
+		/*
+		 * Add an onclick function to each key
+		 */
+		keys[i].onclick = function(e) 
+		{
+			var screen = document.querySelector('#calc-screen');
+			var screenValue = screen.innerHTML;
+			var buttonValue = this.innerHTML;
+
+			/*
+			 * If the user clicks on the 'C' (clear) button, clear the calculator screen
+			 */
+			if (buttonValue == 'C')
+			{
+					screen.innerHTML = '';
+					decimal = false;
+
+			} 
+			/*
+			 * If the user clicks on calculate, evaluate the equation on the screen
+			 * and set the decimal flag equal to false
+			 */
+			else if (buttonValue == 'calculate') 
+			{
+					var equation = screenValue;
+					
+					if (equation)
+					{
+						screen.innerHTML = eval(equation);
+					}
+					
+					decimal = false;
+
+			} 
+			/*
+			 * If the user clicks on an operator and the calculator screen
+			 * is not empty, add the operator to the screen and set the 
+			 * deimal flag equal to false
+			 */
+			else if(operators.indexOf(buttonValue) > -1) 
+			{	
+				
+				screen.innerHTML += buttonValue;
+				
+				decimal = false;
+			}
+			/*
+			 * If the user clicks on the decimal button and there isn't a 
+			 * decimal already, add the decimal and set the flag to true
+			 */
+			else if (buttonValue == '.') 
+			{
+				if (!decimal)
+				{
+					screen.innerHTML += buttonValue;
+					decimal = true;
+				}
+			} 
+			else 
+			{
+				screen.innerHTML += buttonValue;
+			}
+			e.preventDefault();
+		}
+	}
