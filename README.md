@@ -1,2 +1,2 @@
-# js-calculator
-calculator for cis343
+# calculator
+Written using Haml, Sass, and vanilla JS
